@@ -1,0 +1,60 @@
+
+service: ${file(uxy.json):chatbot_name}-chatbot-service
+
+provider:
+  name: aws
+  runtime: python3.7
+  stage: ${opt:stage, 'dev'}
+  region: ap-southeast-1
+  iamRoleStastements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - Fn::Join: ['', [Fn::GetAtt: [ chatbotSessionTable, Arn ]] ]
+
+  environment:
+    STAGE: ${self:provider.stage}
+    REGION: ${self:provider.region}
+    chatbot_name: ${self:custom.chatbot_name}
+    bot_session_table: ${self:custom.bot_session_table}
+
+custom:
+  chatbot_name: ${file(uxy.json):chatbot_name}
+  bot_session_table: ${self:custom.chatbot_name}-session-${self:provider.stage}
+
+functions:
+  webhook:
+    handler: endpoints/facebook.handler
+    events:
+      - http:
+          path: webhook/fb
+          method: post
+          cors: true
+
+resources:
+  Resources:
+    chatbotSessionTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self.custom.bot_session_table}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+
+        KeySchema:
+          - AttributeName: userid
+            KeyType: HASH
+
+        ProvisionThroughput:
+          ReadCapacityUnits: 3
+          WriteCapacityUnits: 3
+
+
+

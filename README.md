@@ -1,2 +1,2 @@
-# xyz-chatbot-framework
-Another python chatbot framework (with serverless this time)
+# uxy-v2
+AWS Servless chatbot framework v2
