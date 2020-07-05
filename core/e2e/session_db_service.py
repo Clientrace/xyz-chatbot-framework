@@ -8,7 +8,6 @@ class SessionDBService:
     """
     self.repo = repo
 
-
   def init_user_session(self, stateObject):
     """
     Initialize User Session
@@ -24,7 +23,7 @@ class SessionDBService:
     :param userId: user chatbot session id
     """
 
-    self.repo.update_item(userId, state)
+    self.repo.update_state(userId, state)
 
 
 

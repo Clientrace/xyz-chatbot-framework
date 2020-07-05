@@ -22,12 +22,15 @@ provider:
   environment:
     STAGE: ${self:provider.stage}
     REGION: ${self:provider.region}
+    FB_ACCESS_TOKEN: ${self:custom.fb_access_token}.${self:provider.stage}
     chatbot_name: ${self:custom.chatbot_name}
     bot_session_table: ${self:custom.bot_session_table}
 
 custom:
   chatbot_name: ${file(uxy.json):chatbot_name}
   bot_session_table: ${self:custom.chatbot_name}-session-${self:provider.stage}
+  fb_access_token:
+    dev: TEST-ACCESS-TOKEN
 
 functions:
   webhook:
@@ -55,6 +58,4 @@ resources:
         ProvisionThroughput:
           ReadCapacityUnits: 3
           WriteCapacityUnits: 3
-
-
 

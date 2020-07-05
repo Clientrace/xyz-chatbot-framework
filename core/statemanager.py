@@ -85,13 +85,17 @@ class Context:
 
 
 class StateRouter:
+  """
+  Chatbot State Transition Router
+  """
 
-  def __init__(self, userObject, msgObject, outputBuilder, profileBuilder=None):
+  def __init__(self, userObject, msgObject, outputBuilder, stateService, profileBuilder=None):
     """
     Initialize State Router Module
     :param userObject: chatbot user info
     :param msgObject: chatbot user msg
     :param outputBuilder: messaging platform outbound builder
+    :param stateService: chatbot state service
     :param profileBuilder: optional userprofile builder
     """
 
@@ -99,6 +103,26 @@ class StateRouter:
     self.userObject = userObject
     self.msgObject = msgObject
     self.outputBuilder = outputBuilder
+    self.stateService = stateService
+
+
+  def _next_state(self, state):
+    """
+    Update User State
+    :param state: state name
+    :type state: string
+    """
+
+    self.stateService.update_session_state(
+      self.userObject['id'],
+      state
+    )
+
+
+  def _init_user(self, profileBuilder):
+    pass
+
+
 
 
 
