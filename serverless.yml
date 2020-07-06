@@ -1,5 +1,5 @@
 
-service: ${file(uxy.json):chatbot_name}-chatbot-service
+service: ${file(package.json):name}-chatbot-service
 
 provider:
   name: aws
@@ -22,12 +22,16 @@ provider:
   environment:
     STAGE: ${self:provider.stage}
     REGION: ${self:provider.region}
-    FB_ACCESS_TOKEN: ${self:custom.fb_access_token}.${self:provider.stage}
+    FB_ACCESS_TOKEN: ${self:custom.fb_access_token.${self:provider.stage}}
     chatbot_name: ${self:custom.chatbot_name}
     bot_session_table: ${self:custom.bot_session_table}
 
 custom:
-  chatbot_name: ${file(uxy.json):chatbot_name}
+  scripts:
+    hooks:
+      'deploy:createDeploymentArtifacts' : npm test
+
+  chatbot_name: ${file(package.json):name}
   bot_session_table: ${self:custom.chatbot_name}-session-${self:provider.stage}
   fb_access_token:
     dev: TEST-ACCESS-TOKEN
@@ -46,7 +50,7 @@ resources:
     chatbotSessionTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self.custom.bot_session_table}
+        TableName: ${self:custom.bot_session_table}
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
@@ -58,4 +62,8 @@ resources:
         ProvisionThroughput:
           ReadCapacityUnits: 3
           WriteCapacityUnits: 3
+
+plugins:
+  - serverless-plugin-scripts
+
 

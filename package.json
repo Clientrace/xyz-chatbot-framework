@@ -1,0 +1,12 @@
+{
+  "name": "xyz",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "coverage run -m unittest -v"
+  },
+  "dependencies": {
+    "serverless-plugin-scripts": "^1.0.2"
+  }
+}
+
+

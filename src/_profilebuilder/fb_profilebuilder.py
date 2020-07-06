@@ -23,7 +23,8 @@ class FBProfileBuilder:
     userInfo = self._get_user_info()
     self.stateService.init_user_session({
       'userId' : self.userId,
-      'first_name' : userInfo['first_name']
+      'first_name' : userInfo['first_name'],
+      'last_name' : userInfo['last_name']
     })
     return userInfo
 

@@ -26,5 +26,14 @@ class SessionDBService:
     self.repo.update_state(userId, state)
 
 
+  def get_user_profile(self, userId):
+    """
+    Get User Profile from Database
+    :param userId: user identifier
+    """
+
+    self.repo.get_user_profile(userId)
+
+
 
 

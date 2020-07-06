@@ -1,7 +1,7 @@
 
 import unittest
 from unittest import mock
-from engine.e2e.session_db_service import SessionDBService
+from core.e2e.session_db_service import SessionDBService
 
 class TestSessionDBService(unittest.TestCase):
 

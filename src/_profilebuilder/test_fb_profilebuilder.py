@@ -1,23 +1,39 @@
 
+import os
+import requests
 import unittest
 from unittest import mock
-from src._profilebuilde.fb_profile_builder import FBProfileBuilder
+from src._profilebuilder.fb_profilebuilder import FBProfileBuilder
 
-class TestFBProfileBuilder(unittest.TestSuite):
+class TestFBProfileBuilder(unittest.TestCase):
 
-  @mock.patch('requests')
-  def test_init_fb_profilebuilder(self, mockReq):
+  os.environ['FB_ACCESS_TOKEN'] = 'testToken'
+
+  @mock.patch('requests.get')
+  def test_fb_profilebuilder(self, mockReqGet):
     stateService = mock.Mock()
     fbProfileBuilder = FBProfileBuilder(
       'testUserId',
       stateService
     )
 
-    mockReq.get.return_value = {
-      'testkey' : 'testValue'
+    getReturn = {
+      'first_name' : 'testFirstName',
+      'last_name' : 'testLastName'
     }
+    mockReqGet.return_value.json.return_value = getReturn
 
-    userInfo = fbProfileBuilder._get_user_info()
+    resp = fbProfileBuilder()
+    self.assertEqual(getReturn, resp)
+
+    stateService.init_user_session.assert_called_with({
+      'userId' : 'testUserId',
+      'first_name' : 'testFirstName',
+      'last_name' : 'testLastName'
+    })
+
+
+
 
 
 

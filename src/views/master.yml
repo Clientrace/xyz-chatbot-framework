@@ -1,0 +1,19 @@
+
+botname: XYZ
+description: xyz chatbot description
+
+init_state: welcome
+states:
+  welcome:
+    description: welcome state
+    next: main
+  main:
+    next:
+      - end1
+      - end2
+      - end3
+
+
+
+
+

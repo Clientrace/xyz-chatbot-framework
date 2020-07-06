@@ -1,7 +1,7 @@
 
 import os
 import json
-from os import path
+import yaml
 
 
 class Context:
@@ -119,9 +119,49 @@ class StateRouter:
     )
 
 
-  def _init_user(self, profileBuilder):
-    pass
+  def _init_user(self):
+    """
+    Initilize User Record
+    :returns: user profile object
+    :rtype: json/dictionary
+    """
 
+    userProfile = self.profileBuilder(self.userObject['id'], self.stateService)()
+    self.stateService.init_user_session(userProfile)
+    return userProfile
+
+
+  def _get_user_profile(self):
+    """
+    Get User Profile Record
+    :returns: user profile record
+    :rtype: json/dictionary
+    """
+
+    userProfile = self.stateService._get_user_profile(self.userObject['id'])
+    if userProfile == None:
+      return self._init_user()
+    return userProfile
+
+
+  def _get_init_state(self):
+    """
+    Get initial state
+    :returns: initial chatbot state
+    :rtype: string
+    """
+
+    masterFile = open('src/views/master.yml').read()
+    masterConfig = yaml.safe_load(masterFile)
+    return masterConfig['init_state']
+
+
+  def execute(self):
+    """
+    Execute Current State
+    """
+
+    
 
 
 
