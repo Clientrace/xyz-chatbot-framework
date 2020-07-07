@@ -30,6 +30,7 @@ custom:
   scripts:
     hooks:
       'deploy:createDeploymentArtifacts' : npm test
+      'before:deploy:deploy' : python3 validator.py
 
   chatbot_name: ${file(package.json):name}
   bot_session_table: ${self:custom.chatbot_name}-session-${self:provider.stage}

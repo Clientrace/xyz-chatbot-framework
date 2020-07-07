@@ -152,9 +152,6 @@ class TestContext(unittest.TestCase):
 
     self.assertEqual(resp, 'welcome')
 
-  def test_master_file_validations(self):
-    self.fail()
-
 
   def test_execute_state(self):
     userObject = {
