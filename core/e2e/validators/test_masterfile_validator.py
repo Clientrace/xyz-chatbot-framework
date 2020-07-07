@@ -42,7 +42,7 @@ class TestMasterFileValidator(unittest.TestCase):
 
     self.assertEqual(
       context.exception.args[0],
-      'Invalid master file format.'
+      'Invalid master file format. Missing key botname'
     )
 
 
@@ -80,6 +80,25 @@ class TestMasterFileValidator(unittest.TestCase):
     self.assertEqual(
       context.exception.args[0],
       "Invalid master file format. Next state missing in 'welcome' state."
+    )
+
+    safe_load.return_value = {
+      'botname' : 'testBotName',
+      'description' : 'testDescription',
+      'init_state' : 'welcome',
+      'states' : {
+        'welcome' : {
+          'next' : 'main'
+        }
+      }
+    }
+
+    with self.assertRaises(Exception) as context:
+      masterfile_validator._validate_master_file_config_values()
+
+    self.assertEqual(
+      context.exception.args[0],
+      "Invalid master file format. Value 'main' in state welcome."
     )
 
 

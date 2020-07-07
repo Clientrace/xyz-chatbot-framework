@@ -34,16 +34,17 @@ def _validate_master_file_config_values():
   requiredKeys = ['botname', 'description', 'init_state', 'states']
   for key in requiredKeys:
     if key not in config:
-      raise MasterFileError('Invalid master file format.')
+      raise MasterFileError('Invalid master file format. Missing key '+key)
 
   if config['init_state'] not in config['states']:
     raise MasterFileError("Invalid master file format. Invalid " + config['init_state']+" in init_state.")
 
   for state in config['states']:
-    if 'next' not in state:
+    if 'next' not in config['states'][state]:
       raise MasterFileError("Invalid master file format. Next state missing in '"+state+"' state.")
-
-
+    
+    if config['states'][state]['next'] not in config['states']:
+      raise MasterFileError("Invalid master file format. Value '"+config['states'][state]['next']+"' in state "+state + ".")
 
 
 
